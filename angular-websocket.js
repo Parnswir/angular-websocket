@@ -87,6 +87,8 @@
       4000
     ];
 
+    $WebSocket.prototype._backOffTimeout = null;
+
     $WebSocket.prototype.safeDigest = function safeDigest(autoApply) {
       if (autoApply && !this.scope.$$phase) {
         this.scope.$digest();
@@ -286,7 +288,7 @@
       var backoffDelaySeconds = backoffDelay / 1000;
       console.log('Reconnecting in ' + backoffDelaySeconds + ' seconds');
 
-      $timeout(angular.bind(this, this._connect), backoffDelay);
+      this._backOffTimeout = $timeout(angular.bind(this, this._connect), backoffDelay);
 
       return this;
     };
